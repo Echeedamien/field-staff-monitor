@@ -37,6 +37,10 @@ except:
 
 db = firestore.client()
 
+@app.route('/landing')
+def landing():
+    return render_template('landing.html')
+
 @app.route('/')
 def index():
     if 'user' in session:
@@ -45,7 +49,7 @@ def index():
             return redirect(url_for('admin_dashboard'))
         else:
             return redirect(url_for('staff_dashboard'))
-    return redirect(url_for('login'))
+    return redirect(url_for('landing'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
