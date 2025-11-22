@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Field Staff Monitor</title>
+    <title>Marketing Monitoring system</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{{ url_for('index') }}" class="nav-logo">FieldStaff Monitor</a>
+            <a href="{{ url_for('index') }}" class="nav-logo">Marketing Monitoring system</a>
             <div class="nav-menu">
                 {% if session.user %}
                     <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
