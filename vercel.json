@@ -13,7 +13,7 @@
     }
   ],
   "env": {
-    "SECRET_KEY": "@secret_key",
+    "SECRET_KEY": "a31P3ibrZyX0cN1TbcEQJvDt1wMCOaz3O00dZ21NWuc=",
     "FIREBASE_TYPE": "service_account",
     "FIREBASE_PROJECT_ID": "field-staff-monitor",
     "FIREBASE_PRIVATE_KEY_ID": "9b4e81a5eb21a0f13f18f6904f826486c410ca2e",
