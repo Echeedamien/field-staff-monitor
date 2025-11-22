@@ -6,6 +6,7 @@ import json
 import os
 from datetime import datetime
 import uuid
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
@@ -50,6 +51,112 @@ def index():
         else:
             return redirect(url_for('staff_dashboard'))
     return redirect(url_for('landing'))
+
+# Add these new routes to your app.py
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if 'user' in session:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        user_type = request.form.get('user_type', 'staff')  # staff or admin
+        
+        # Validation
+        if not name or not email or not password:
+            return render_template('register.html', error='All fields are required')
+        
+        if password != confirm_password:
+            return render_template('register.html', error='Passwords do not match')
+        
+        if len(password) < 6:
+            return render_template('register.html', error='Password must be at least 6 characters')
+        
+        try:
+            # Check if user already exists
+            users_ref = db.collection('users')
+            query = users_ref.where('email', '==', email).limit(1)
+            results = query.get()
+            
+            if len(results) > 0:
+                return render_template('register.html', error='Email already registered')
+            
+            # Create new user (in a real app, you'd hash the password)
+            user_data = {
+                'name': name,
+                'email': email,
+                'password':  generate_password_hash(password),  # In production, hash this password!
+                'is_admin': (user_type == 'admin'),
+                'created_at': datetime.now(),
+                'active': True
+            }
+            
+            # Add user to database
+            new_user_ref = db.collection('users').document()
+            new_user_ref.set(user_data)
+            
+            # Auto-login after registration
+            session['user'] = {
+                'id': new_user_ref.id,
+                'email': email,
+                'name': name,
+                'is_admin': (user_type == 'admin')
+            }
+            
+            return redirect(url_for('index'))
+            
+        except Exception as e:
+            return render_template('register.html', error=str(e))
+    
+    return render_template('register.html')
+
+@app.route('/admin/create_user', methods=['GET', 'POST'])
+def admin_create_user():
+    if 'user' not in session or not session['user'].get('is_admin', False):
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user_type = request.form.get('user_type', 'staff')
+        
+        # Validation
+        if not name or not email or not password:
+            return render_template('admin_create_user.html', error='All fields are required')
+        
+        try:
+            # Check if user already exists
+            users_ref = db.collection('users')
+            query = users_ref.where('email', '==', email).limit(1)
+            results = query.get()
+            
+            if len(results) > 0:
+                return render_template('admin_create_user.html', error='Email already registered')
+            
+            # Create new user
+            user_data = {
+                'name': name,
+                'email': email,
+                'password':  generate_password_hash(password),  # Hash this in production!
+                'is_admin': (user_type == 'admin'),
+                'created_at': datetime.now(),
+                'created_by': session['user']['id'],
+                'active': True
+            }
+            
+            db.collection('users').document().set(user_data)
+            
+            return redirect(url_for('admin_dashboard', message='User created successfully'))
+            
+        except Exception as e:
+            return render_template('admin_create_user.html', error=str(e))
+    
+    return render_template('admin_create_user.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
