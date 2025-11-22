@@ -1,0 +1,71 @@
+<!-- templates/staff_dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Staff Dashboard</h2>
+    
+    <div class="status-cards">
+        <div class="status-card {% if has_login %}completed{% endif %}">
+            <h3>Login</h3>
+            <p>{% if has_login %}Completed{% else %}Pending{% endif %}</p>
+        </div>
+        <div class="status-card {% if has_logout %}completed{% endif %}">
+            <h3>Logout</h3>
+            <p>{% if has_logout %}Completed{% else %}Pending{% endif %}</p>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        {% if not has_login %}
+        <button id="login-btn" class="btn btn-primary">Check In</button>
+        {% elif not has_logout %}
+        <button id="logout-btn" class="btn btn-secondary">Check Out</button>
+        {% endif %}
+    </div>
+    
+    <div class="activity-log">
+        <h3>Today's Activities</h3>
+        {% if activities %}
+        <ul>
+            {% for activity in activities %}
+            <li>
+                <strong>{{ activity.type|title }}</strong> at 
+                {{ activity.timestamp.strftime('%H:%M') }} - 
+                {{ activity.location }}
+                {% if activity.photo_url %}
+                <br><img src="{{ url_for('static', filename=activity.photo_url[1:]) }}" alt="Proof photo" class="proof-photo">
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No activities recorded today.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal for check-in/check-out -->
+<div id="action-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modal-title">Check In</h3>
+        <form id="action-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+                <button type="button" id="get-location" class="btn btn-small">Get Current Location</button>
+            </div>
+            <div class="form-group">
+                <label for="photo">Photo Proof:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" capture="camera" required>
+            </div>
+            <input type="hidden" id="lat" name="lat">
+            <input type="hidden" id="lng" name="lng">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

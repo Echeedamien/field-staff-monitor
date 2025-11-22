@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "env": {
+    "SECRET_KEY": "@secret_key",
+    "FIREBASE_TYPE": "service_account",
+    "FIREBASE_PROJECT_ID": "field-staff-monitor",
+    "FIREBASE_PRIVATE_KEY_ID": "9b4e81a5eb21a0f13f18f6904f826486c410ca2e",
+    "FIREBASE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQChF7Uc3ux2nF7I\nqN3YDK63f17h5BCkPAPOtrvfglrs2x6/uacGSXnf9b77HIF3Lsq1rxTNtUU2S1/C\naBnmzBkjImOJEtaZ4LWTfPQuwDM26YBmlSdWhF13SOO57uIFwxbjdnQ2JYi3VdDk\nVrTR4HOtVgEYjrT4FIVlba5OI89i8EaPXKpYYUrX7ErhEirb1TyS4NkQxw7+1TWj\ndjZqzPwJ414KxFSbEEXdRHiyCZhRLAfaT+OBU3+YHhX+l3gv56pAYzyOX+cCeW9C\ngvF79nXpzGCLj7PI6LlZsLYYxaOVAJtelpPO+wuLtqDCFyZWFU+znJo/XtNW67K4\nFjETLtXZAgMBAAECgf9LSKV/Cln325wa43rJruq/Hc550RSEHhY3qFkWW04UqjYt\ncdXOk0Do1BOCABBkm2Quy2O7vvQgnWAqSKbuoA/mcN2TccF1UvlPtABNSq/55FCk\ng8jz5dnkwaSO1Zv2I6DOusz4K70HDXBSKWws/pSfHuCO57CdBohQ11vsjDNJ84mn\nNi/Fwg0dJrUIncDFc/VKe4spb/PezWuHgmVnvT9W06kBTO24r1Ewgq+XMTLOAmw+\n9fglVh0/7zNyhJvBtLJlY1fCw1RW0+tJfqRvfz/40A7zpQackYUzJbtegL0P/UX6\n43eWnUcWHdJ0n0q/et1Xv1Tf8neTja7voggxTD0CgYEAzIwGdSwKiMAjpfDkh7aA\neE4XbHH4nkjj8p4j3N9yCjw8TAY5u/c+StaxRSla2K6CJn4aUcSDXcSV2HPJguZR\n1p166Y6sW5KYIyOB2UZ5Dwa16aLMVIzJTcpxuZYNqW4O1tNJdCWsm+fjfwJMrVNi\nyxZeAzmY1V0qgirdZgpo630CgYEAyZ1m1ipghs9e/VfcEbQi4fD8qEjH5RYLB/FS\nvz9XaIMEkWWRsUKD2xRCCabIC4tk+ugyfk+Qv93FNePZjFONXff1x/Olj9rFGyLQ\ngZ+GwMOwdpTCOzO39AzG8tijqBtITelm6fqP7SjlN/GZreQZZvo0LAKfCrRYrTdA\nWcMPSo0CgYA8uIimOfe6lsc+WJ+OxhenHw+HCuJSIrNAb7+XruFMtorzyplS+leM\noeUn8dndHxjV0nN/uIWCzXvqMJ0uda7vtfop4Ue7O25caAsA9BG16zkPbVuY8d5E\ncIeIH0pY9KoFDd3tU83EznbTWlxmy601OqOX834yQKEA2Ta2NvrkhQKBgFKaZb7L\nX/77yXxc2fJ67mvJ04qTPysR6/UWH4PxzLsqKt3zUkzg5qsE0sWnioCIXRgbuExe\nBv1FPH6G2uQOe3YLmKySm7ujs2wZyHnDRW+G/a6n5ihhWTXpYj2vGuZOP0KEpUCq\nAvv07G0OVJuVP/8b9fIuJME7ALX/VCMysvolAoGAa5RnqEsNEcM+s4q4KyzmdZW3\nvPbHk2IyO88e9YmqpMoRmTzViUo/u8Lc2e5x8vmBOHd0xI0EbINys71ToId0CHCc\n9RSkwEN/Zgt58fxljLE0hmbF0WelkoE1mcWahCqtkOSkFdmoqbT0GgBI0wC7//C2\nYhTmouGQ+2U3pzbeETg=\n-----END PRIVATE KEY-----\n",
+    "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-fbsvc@field-staff-monitor.iam.gserviceaccount.com",
+    "FIREBASE_CLIENT_ID": "115728712669648642871",
+    "FIREBASE_AUTH_URI": "https://accounts.google.com/o/oauth2/auth",
+    "FIREBASE_TOKEN_URI": "https://oauth2.googleapis.com/token",
+    "FIREBASE_AUTH_PROVIDER_CERT_URL": "https://www.googleapis.com/oauth2/v1/certs",
+    "FIREBASE_CLIENT_CERT_URL": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40field-staff-monitor.iam.gserviceaccount.com",
+    "FIREBASE_UNIVERSE_DOMAIN": "googleapis.com"
+  }
+}

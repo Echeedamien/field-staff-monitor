@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Activity Logs</h2>
+    
+    <div class="filters">
+        <form method="GET">
+            <div class="form-group">
+                <label for="user">Staff Member:</label>
+                <select id="user" name="user">
+                    <option value="all">All Staff</option>
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if filter_user == user.id %}selected{% endif %}>{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" value="{{ filter_date }}">
+            </div>
+            <div class="form-group">
+                <label for="activity_type">Activity Type:</label>
+                <select id="activity_type" name="activity_type">
+                    <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All Activities</option>
+                    <option value="login" {% if filter_type == 'login' %}selected{% endif %}>Login Only</option>
+                    <option value="logout" {% if filter_type == 'logout' %}selected{% endif %}>Logout Only</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="button" class="btn btn-secondary" onclick="exportToCSV()">Export to CSV</button>
+        </form>
+    </div>
+    
+    <div class="activity-table">
+        <h3>Activity Records</h3>
+        {% if activities %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Type</th>
+                        <th>Date & Time</th>
+                        <th>Location</th>
+                        <th>Coordinates</th>
+                        <th>Photo Proof</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.user_name }}</td>
+                        <td>
+                            <span class="badge {% if activity.type == 'login' %}badge-success{% else %}badge-warning{% endif %}">
+                                {{ activity.type|title }}
+                            </span>
+                        </td>
+                        <td>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ activity.location }}</td>
+                        <td>
+                            {% if activity.lat and activity.lng %}
+                            <a href="https://maps.google.com/?q={{ activity.lat }},{{ activity.lng }}" target="_blank">
+                                View on Map
+                            </a>
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if activity.photo_url %}
+                            <img src="{{ url_for('static', filename=activity.photo_url[1:]) }}" 
+                                 alt="Proof photo" 
+                                 class="proof-photo"
+                                 onclick="openModal('{{ url_for('static', filename=activity.photo_url[1:]) }}')">
+                            {% else %}
+                            No photo
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No activities found for the selected filters.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="image-modal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modal-image">
+</div>
+
+<script>
+function exportToCSV() {
+    // This would generate a CSV export in a real implementation
+    alert('CSV export functionality would be implemented here');
+}
+
+function openModal(imageSrc) {
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-image');
+    modal.style.display = 'block';
+    modalImg.src = imageSrc;
+}
+
+function closeModal() {
+    document.getElementById('image-modal').style.display = 'none';
+}
+
+// Close modal when clicking outside the image
+window.onclick = function(event) {
+    const modal = document.getElementById('image-modal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+</script>
+
+<style>
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.proof-photo {
+    max-width: 100px;
+    max-height: 75px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.proof-photo:hover {
+    transform: scale(1.05);
+}
+
+/* Modal styles for image viewing */
+#image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+#image-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%;
+    max-height: 80%;
+}
+</style>
+{% endblock %}

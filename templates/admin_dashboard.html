@@ -1,0 +1,63 @@
+<!-- templates/admin_dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Admin Dashboard</h2>
+    
+    <div class="filters">
+        <form method="GET">
+            <div class="form-group">
+                <label for="user">Staff Member:</label>
+                <select id="user" name="user">
+                    <option value="all">All Staff</option>
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if filter_user == user.id %}selected{% endif %}>{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" value="{{ filter_date }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
+    
+    <div class="activity-table">
+        <h3>Activity Logs</h3>
+        {% if activities %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Staff Member</th>
+                    <th>Type</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Photo Proof</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.user_name }}</td>
+                    <td>{{ activity.type }}</td>
+                    <td>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ activity.location }}</td>
+                    <td>
+                        {% if activity.photo_url %}
+                        <img src="{{ url_for('static', filename=activity.photo_url[1:]) }}" alt="Proof photo" class="proof-photo">
+                        {% else %}
+                        No photo
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No activities found for the selected filters.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
